@@ -190,3 +190,16 @@ export function rounds(): { round: number; matches: Match[] }[] {
   }
   return out;
 }
+
+// --- Contexto del jugador conectado (demo) ---
+export const ME_PAIR_ID = "p4";
+export function myPair(): Pair { return getPair(ME_PAIR_ID)!; }
+export function myNextMatch(): Match | null {
+  return (
+    MATCHES.filter((m) => (m.homeId === ME_PAIR_ID || m.awayId === ME_PAIR_ID) && !m.played)
+      .sort((a, b) => a.round - b.round)[0] ?? null
+  );
+}
+export function myRecentForm(): PairMatch[] {
+  return matchesForPair(ME_PAIR_ID).filter((g) => g.result).slice(-5);
+}

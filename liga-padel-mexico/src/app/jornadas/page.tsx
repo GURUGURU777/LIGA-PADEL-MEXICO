@@ -1,9 +1,11 @@
 import { SEASON, rounds, getPair } from "@/lib/demo";
+import { LigaTabs } from "@/components/LigaTabs";
 
 export default function JornadasPage() {
   const data = rounds();
   return (
     <div>
+      <LigaTabs />
       <div className="mb-6">
         <h1 className="text-2xl font-semibold">Jornadas</h1>
         <p className="text-sm text-ink-muted mt-1">Calendario y cruces fijos · {SEASON.category}</p>

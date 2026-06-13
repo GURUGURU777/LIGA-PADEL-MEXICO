@@ -1,11 +1,13 @@
 import Link from "next/link";
 import { SEASON, standings } from "@/lib/demo";
+import { LigaTabs } from "@/components/LigaTabs";
 
 export default function TablaPage() {
   const rows = standings();
 
   return (
     <div>
+      <LigaTabs />
       <div className="mb-6">
         <h1 className="text-2xl font-semibold">Tabla de posiciones</h1>
         <p className="text-sm text-ink-muted mt-1">
