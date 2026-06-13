@@ -1,4 +1,4 @@
-# Liga Pádel México 
+# Liga Pádel México
 
 App de la liga de pádel por temporada: coordinación de horarios, partidos y
 ranking en vivo. Stack: **Next.js 14 (App Router) + Supabase + Tailwind**.

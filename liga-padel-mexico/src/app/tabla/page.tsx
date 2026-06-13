@@ -1,71 +1,70 @@
-import type { StandingRow } from "@/lib/types";
-import { createClient } from "@/lib/supabase/server";
+import Link from "next/link";
+import { SEASON, standings } from "@/lib/demo";
 
-// Tabla de posiciones en vivo. Lee de la vista `standings` del esquema.
-// Si no hay conexión a Supabase todavía, cae a datos de ejemplo para que
-// la app corra de inmediato.
-const demo: StandingRow[] = [
-  { position: 1, pairId: "1", teamName: "Los Halcones", played: 5, points: 15 },
-  { position: 2, pairId: "2", teamName: "Tú & Carlos", played: 5, points: 12, isMe: true },
-  { position: 3, pairId: "3", teamName: "Las Panteras", played: 5, points: 10 },
-  { position: 4, pairId: "4", teamName: "Dúo Riviera", played: 5, points: 7 },
-  { position: 5, pairId: "5", teamName: "Smash Bros", played: 5, points: 4 },
-];
+export default function TablaPage() {
+  const rows = standings();
 
-async function getStandings(): Promise<StandingRow[]> {
-  try {
-    const supabase = createClient();
-    const { data, error } = await supabase
-      .from("standings")
-      .select("pair_id, team_name, played, points")
-      .order("points", { ascending: false });
-    if (error || !data || data.length === 0) return demo;
-    return data.map((r, i) => ({
-      position: i + 1,
-      pairId: r.pair_id as string,
-      teamName: (r.team_name as string) ?? "Sin nombre",
-      played: r.played as number,
-      points: r.points as number,
-    }));
-  } catch {
-    return demo; // todavía sin .env.local configurado
-  }
-}
-
-export default async function TablaPage() {
-  const rows = await getStandings();
   return (
-    <div className="px-4 py-4">
-      <h1 className="text-base font-medium">Tabla de posiciones</h1>
-      <p className="text-xs text-ink-muted mt-0.5 mb-4">2ª categoría · Zona A · en vivo</p>
+    <div>
+      <div className="mb-6">
+        <h1 className="text-2xl font-semibold">Tabla de posiciones</h1>
+        <p className="text-sm text-ink-muted mt-1">
+          {SEASON.category} · {SEASON.playedRounds} de {SEASON.totalRounds} jornadas jugadas
+        </p>
+      </div>
 
-      <table className="w-full text-[13px] border-collapse">
-        <thead>
-          <tr className="text-[11px] text-ink-muted text-left">
-            <th className="font-normal py-1.5 px-1">#</th>
-            <th className="font-normal py-1.5 px-1">Pareja</th>
-            <th className="font-normal py-1.5 px-1 text-center">PJ</th>
-            <th className="font-normal py-1.5 px-1 text-right">Pts</th>
-          </tr>
-        </thead>
-        <tbody>
-          {rows.map((r) => (
-            <tr
-              key={r.pairId}
-              style={{
-                borderTop: "0.5px solid #16324f",
-                background: r.isMe ? "#13314e" : "transparent",
-                color: r.isMe ? "#6FB0EE" : "#EAF2FB",
-              }}
-            >
-              <td className="py-2.5 px-1" style={{ fontWeight: r.isMe ? 500 : 400 }}>{r.position}</td>
-              <td className="py-2.5 px-1" style={{ fontWeight: r.isMe ? 500 : 400 }}>{r.teamName}</td>
-              <td className="py-2.5 px-1 text-center" style={{ color: r.isMe ? "#6FB0EE" : "#7CA6D6" }}>{r.played}</td>
-              <td className="py-2.5 px-1 text-right font-medium">{r.points}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <div className="rounded-xl border border-line overflow-hidden" style={{ background: "var(--surface)" }}>
+        <div className="scroll-x">
+          <table className="w-full text-sm" style={{ minWidth: 620 }}>
+            <thead>
+              <tr className="text-[11px] uppercase tracking-wide text-ink-faint" style={{ background: "var(--navy)" }}>
+                <th className="text-left font-medium py-3 pl-4 w-10">#</th>
+                <th className="text-left font-medium py-3">Pareja</th>
+                <th className="text-center font-medium py-3 w-12">PJ</th>
+                <th className="text-center font-medium py-3 w-12">G</th>
+                <th className="text-center font-medium py-3 w-12">P</th>
+                <th className="text-center font-medium py-3 w-14">GF</th>
+                <th className="text-center font-medium py-3 w-14">GC</th>
+                <th className="text-center font-medium py-3 w-14">DIF</th>
+                <th className="text-center font-medium py-3 w-14 pr-4">Pts</th>
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map((r) => {
+                const top = r.position <= 4;
+                return (
+                  <tr key={r.pair.id} className="border-t border-line-soft hover:bg-navy-elevated/40 transition-colors">
+                    <td className="py-3.5 pl-4">
+                      <span className="inline-flex items-center justify-center w-6 h-6 rounded-md text-xs font-semibold"
+                        style={top ? { background: "rgba(59,142,224,0.15)", color: "var(--cyan-light)" } : { color: "var(--ink-faint)" }}>
+                        {r.position}
+                      </span>
+                    </td>
+                    <td className="py-3.5">
+                      <Link href={`/parejas/${r.pair.id}`} className="font-medium hover:text-cyan-light transition-colors">
+                        {r.pair.name}
+                      </Link>
+                      <div className="text-[11px] text-ink-faint">{r.pair.player1} · {r.pair.player2}</div>
+                    </td>
+                    <td className="text-center text-ink-muted">{r.pj}</td>
+                    <td className="text-center" style={{ color: "var(--win)" }}>{r.g}</td>
+                    <td className="text-center" style={{ color: "var(--loss)" }}>{r.p}</td>
+                    <td className="text-center text-ink-muted">{r.gf}</td>
+                    <td className="text-center text-ink-muted">{r.gc}</td>
+                    <td className="text-center text-ink-muted">{r.dif > 0 ? `+${r.dif}` : r.dif}</td>
+                    <td className="text-center pr-4 font-semibold text-base">{r.pts}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <p className="text-[11px] text-ink-faint mt-3 leading-relaxed">
+        PJ jugados · G ganados · P perdidos · GF games a favor · GC games en contra · DIF diferencia · Pts puntos (3 por victoria).
+        Toca una pareja para ver sus partidos y estadísticas.
+      </p>
     </div>
   );
 }
