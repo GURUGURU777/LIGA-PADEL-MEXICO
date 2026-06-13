@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { SEASON } from "@/lib/demo";
 
 const tabs = [
-  { href: "/", label: "Inicio", icon: "home" },
+  { href: "/inicio", label: "Inicio", icon: "home" },
   { href: "/partidos", label: "Partidos", icon: "ball" },
   { href: "/disponibilidad", label: "Horarios", icon: "clock" },
   { href: "/tabla", label: "Liga", icon: "trophy" },
@@ -26,7 +26,7 @@ export function Nav() {
   const pathname = usePathname();
   const isLiga = LIGA.some((p) => pathname === p || pathname.startsWith(p + "/"));
   const active = (href: string) => {
-    if (href === "/") return pathname === "/";
+    if (href === "/inicio") return pathname === "/inicio";
     if (href === "/tabla") return isLiga;
     return pathname === href || pathname.startsWith(href + "/");
   };
@@ -35,7 +35,7 @@ export function Nav() {
     <>
       <header className="border-b border-line/70 sticky top-0 z-20" style={{ background: "rgba(10,22,38,0.85)", backdropFilter: "blur(8px)" }}>
         <div className="container-app flex items-center justify-between h-16">
-          <Link href="/" className="flex items-center gap-2.5">
+          <Link href="/inicio" className="flex items-center gap-2.5">
             <span className="w-7 h-7 rounded-lg bg-cyan flex items-center justify-center text-[13px] font-bold text-navy">LP</span>
             <div className="leading-tight">
               <div className="text-[15px] font-semibold">Liga Pádel México</div>

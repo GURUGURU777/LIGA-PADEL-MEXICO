@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { SEASON, standings } from "@/lib/demo";
 import { LigaTabs } from "@/components/LigaTabs";
+import { Crest } from "@/components/Crest";
 
 export default function TablaPage() {
   const rows = standings();
@@ -43,10 +44,15 @@ export default function TablaPage() {
                       </span>
                     </td>
                     <td className="py-3.5">
-                      <Link href={`/parejas/${r.pair.id}`} className="font-medium hover:text-cyan-light transition-colors">
-                        {r.pair.name}
-                      </Link>
-                      <div className="text-[11px] text-ink-faint">{r.pair.player1} · {r.pair.player2}</div>
+                      <div className="flex items-center gap-3">
+                        <Crest code={r.pair.code} color={r.pair.color} size={32} />
+                        <div>
+                          <Link href={`/parejas/${r.pair.id}`} className="font-medium hover:text-cyan-light transition-colors">
+                            {r.pair.name}
+                          </Link>
+                          <div className="text-[11px] text-ink-faint">{r.pair.player1} · {r.pair.player2}</div>
+                        </div>
+                      </div>
                     </td>
                     <td className="text-center text-ink-muted">{r.pj}</td>
                     <td className="text-center" style={{ color: "var(--win)" }}>{r.g}</td>

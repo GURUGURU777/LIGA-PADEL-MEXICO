@@ -1,72 +1,125 @@
 import Link from "next/link";
-import { SEASON, myPair, myNextMatch, standingFor, myRecentForm, getPair, ME_PAIR_ID } from "@/lib/demo";
+import { SEASON, standings } from "@/lib/demo";
+import { Crest } from "@/components/Crest";
 
-export default function Home() {
-  const pair = myPair();
-  const me = standingFor(ME_PAIR_ID)!;
-  const next = myNextMatch();
-  const nextOpp = next ? getPair(next.homeId === ME_PAIR_ID ? next.awayId : next.homeId)! : null;
-  const form = myRecentForm();
-  const firstName = pair.player1.split(" ")[0];
+const steps = [
+  ["01", "Inscríbete", "Tú y tu compañero, una cuota por temporada."],
+  ["02", "Carga tus horarios", "La app arma tus partidos sola, sin grupos de WhatsApp."],
+  ["03", "Juega y sube", "Reporta el resultado y escala en la tabla."],
+];
+
+const partners = ["Club Tepic", "Head", "Gatorade"];
+
+export default function Landing() {
+  const top3 = standings().slice(0, 3);
 
   return (
-    <div>
-      <div className="mb-6">
-        <h1 className="text-2xl font-semibold">Hola, {firstName}</h1>
-        <p className="text-sm text-ink-muted mt-1">{pair.name} · {SEASON.category}</p>
-      </div>
-
-      <div className="grid gap-3 md:grid-cols-3">
-        <div className="md:col-span-2 rounded-2xl border border-line p-5" style={{ background: "var(--surface)" }}>
-          <div className="text-[11px] uppercase tracking-wide font-medium" style={{ color: "var(--cyan-light)" }}>Tu próximo partido</div>
-          {next && nextOpp ? (
-            <>
-              <div className="text-xl font-semibold mt-2.5">
-                {pair.name} <span className="text-ink-faint font-normal text-base">vs</span> {nextOpp.name}
-              </div>
-              <div className="text-sm text-ink-muted mt-1.5">Jornada {next.round} · Mié 18 jun, 20:00 · Cancha 2</div>
-              <div className="flex flex-wrap gap-2 mt-4">
-                <Link href="/partidos" className="px-4 py-2 rounded-lg text-sm font-semibold" style={{ background: "var(--cyan)", color: "#fff" }}>Confirmar horario</Link>
-                <Link href="/disponibilidad" className="px-4 py-2 rounded-lg text-sm font-medium border border-line text-ink-muted">Editar disponibilidad</Link>
-              </div>
-            </>
-          ) : (
-            <p className="text-sm text-ink-muted mt-2.5">No tienes partidos próximos. Carga tu disponibilidad para la siguiente jornada.</p>
-          )}
-        </div>
-
-        <Link href="/tabla" className="rounded-2xl border border-line p-5 hover:border-cyan/60 transition-colors" style={{ background: "var(--surface)" }}>
-          <div className="text-[11px] uppercase tracking-wide text-ink-faint font-medium">Tu posición</div>
-          <div className="flex items-baseline gap-2 mt-2.5">
-            <span className="text-3xl font-bold" style={{ color: "var(--cyan-light)" }}>#{me.position}</span>
-            <span className="text-sm text-ink-muted">de 8</span>
+    <div style={{ background: "var(--bg-deep)", minHeight: "100dvh" }} className="text-ink">
+      {/* Header */}
+      <header className="border-b border-line/60">
+        <div className="container-app flex items-center justify-between h-16">
+          <div className="flex items-center gap-2.5">
+            <span className="display w-7 h-7 rounded-lg bg-cyan flex items-center justify-center text-[13px] font-black text-[#03060C]">LP</span>
+            <span className="display font-extrabold text-[15px]">LIGA PÁDEL MX</span>
           </div>
-          <div className="text-sm text-ink-muted mt-2">{me.pts} pts · {me.g}G {me.p}P · {me.dif > 0 ? `+${me.dif}` : me.dif}</div>
-        </Link>
-      </div>
-
-      <Link href="/disponibilidad" className="mt-3 rounded-2xl border border-line p-4 flex items-center justify-between hover:border-cyan/60 transition-colors" style={{ background: "var(--surface)" }}>
-        <div>
-          <div className="font-medium">Tu disponibilidad de esta semana</div>
-          <div className="text-[12px] text-ink-faint mt-0.5">Cargaste 3 franjas · edítalas antes del miércoles</div>
+          <div className="flex items-center gap-2">
+            <Link href="/tabla" className="hidden sm:inline text-sm text-ink-muted px-3 py-1.5">Clasificación</Link>
+            <Link href="/inicio" className="text-sm font-semibold px-4 py-2 rounded-lg" style={{ background: "var(--cyan)", color: "#fff" }}>Entrar</Link>
+          </div>
         </div>
-        <span className="text-sm font-medium whitespace-nowrap" style={{ color: "var(--cyan-light)" }}>Editar →</span>
-      </Link>
+      </header>
 
-      <div className="mt-3 rounded-2xl border border-line p-5" style={{ background: "var(--surface)" }}>
-        <div className="flex items-center justify-between mb-3">
-          <div className="text-[11px] uppercase tracking-wide text-ink-faint font-medium">Tu forma · últimos 5</div>
-          <Link href={`/parejas/${ME_PAIR_ID}`} className="text-[12px]" style={{ color: "var(--cyan-light)" }}>Ver ficha →</Link>
-        </div>
-        <div className="flex gap-2">
-          {form.map((g, i) => (
-            <span key={i} className="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold"
-              style={g.result === "G" ? { background: "rgba(52,199,123,0.15)", color: "var(--win)" } : { background: "rgba(226,87,76,0.15)", color: "var(--loss)" }}>
-              {g.result}
+      {/* Hero */}
+      <section className="container-app pt-12 pb-10 md:pt-20 md:pb-14">
+        <div className="grid md:grid-cols-2 gap-10 items-center">
+          <div>
+            <span className="inline-flex items-center gap-1.5 text-[10px] font-bold tracking-wider text-white px-2.5 py-1 rounded" style={{ background: "var(--loss)" }}>
+              <span className="w-1.5 h-1.5 rounded-full bg-white inline-block" /> JORNADA 6 · MIÉ 8PM
             </span>
+            <h1 className="display font-black leading-[0.92] tracking-tight mt-4 text-5xl md:text-6xl">
+              LIGA<br />PÁDEL<br /><span className="text-cyan">MÉXICO</span>
+            </h1>
+            <p className="text-ink-muted mt-5 max-w-md leading-relaxed">
+              La liga amateur por temporada. Compite todo el año, sube en la tabla y hazte leyenda. {SEASON.name}.
+            </p>
+            <div className="flex flex-wrap gap-3 mt-7">
+              <Link href="/inicio" className="display font-extrabold text-sm px-6 py-3 rounded-xl" style={{ background: "var(--cyan)", color: "#fff" }}>ÚNETE A LA LIGA</Link>
+              <Link href="/tabla" className="text-sm font-semibold px-6 py-3 rounded-xl border border-line text-ink">Ver clasificación</Link>
+            </div>
+            <div className="flex items-center gap-3 mt-7">
+              <span className="text-[10px] tracking-widest text-ink-faint font-semibold">PRESENTADA POR</span>
+              <span className="display font-extrabold text-lg">OXXO</span>
+            </div>
+          </div>
+
+          {/* Top 3 card */}
+          <div className="rounded-2xl border border-line overflow-hidden" style={{ background: "var(--surface)" }}>
+            <div className="px-5 py-4 border-b border-line-soft flex items-center justify-between">
+              <span className="display font-extrabold text-sm">LÍDERES</span>
+              <Link href="/tabla" className="text-[12px] text-cyan-light">Tabla completa →</Link>
+            </div>
+            {top3.map((r) => (
+              <div key={r.pair.id} className="flex items-center gap-3 px-5 py-3.5 border-b border-line-soft last:border-0">
+                <span className="display font-extrabold text-cyan-light w-4">{r.position}</span>
+                <Crest code={r.pair.code} color={r.pair.color} size={32} />
+                <span className="display font-bold text-sm flex-1">{r.pair.name}</span>
+                <span className="display font-black text-xl">{r.pts}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Stats strip */}
+      <section className="border-y border-line/60">
+        <div className="container-app grid grid-cols-3 divide-x divide-line/60">
+          {[["160", "JUGADORES"], ["7", "JORNADAS"], ["3", "CATEGORÍAS"]].map(([n, l]) => (
+            <div key={l} className="text-center py-7">
+              <div className="display font-black text-3xl md:text-4xl">{n}</div>
+              <div className="text-[10px] tracking-widest text-ink-faint mt-1">{l}</div>
+            </div>
           ))}
         </div>
-      </div>
+      </section>
+
+      {/* Cómo funciona */}
+      <section className="container-app py-12">
+        <h2 className="display font-extrabold text-2xl mb-7">CÓMO FUNCIONA</h2>
+        <div className="grid md:grid-cols-3 gap-6">
+          {steps.map(([n, t, d]) => (
+            <div key={n}>
+              <div className="display font-black text-3xl text-cyan">{n}</div>
+              <div className="font-semibold mt-2">{t}</div>
+              <div className="text-sm text-ink-muted mt-1 leading-relaxed">{d}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Patrocinadores */}
+      <section className="border-t border-line/60 py-10">
+        <div className="container-app text-center">
+          <div className="text-[10px] tracking-widest text-ink-faint font-semibold mb-5">NUESTROS PATROCINADORES</div>
+          <div className="flex flex-wrap justify-center gap-3">
+            {partners.map((p) => (
+              <span key={p} className="display font-extrabold text-ink-muted border border-line rounded-xl px-5 py-3">{p}</span>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA + footer */}
+      <section className="container-app py-12 text-center">
+        <h2 className="display font-black text-3xl md:text-4xl">¿LISTO PARA COMPETIR?</h2>
+        <Link href="/inicio" className="display inline-block font-extrabold text-sm px-8 py-3.5 rounded-xl mt-5" style={{ background: "var(--cyan)", color: "#fff" }}>ÚNETE A LA LIGA</Link>
+      </section>
+
+      <footer className="border-t border-line/60 py-7">
+        <div className="container-app flex items-center justify-between text-[12px] text-ink-faint">
+          <span>© 2026 Liga Pádel México</span>
+          <span>{SEASON.club}</span>
+        </div>
+      </footer>
     </div>
   );
 }

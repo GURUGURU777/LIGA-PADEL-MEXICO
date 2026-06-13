@@ -16,20 +16,22 @@ export const SEASON = {
 export interface Pair {
   id: string;
   name: string;
+  code: string; // escudo de 3 letras
+  color: string; // color de la pareja (hex)
   player1: string;
   player2: string;
   strength: number; // 1 = más fuerte (solo para generar resultados demo)
 }
 
 export const PAIRS: Pair[] = [
-  { id: "p1", name: "Los Halcones", player1: "Diego R.", player2: "Mateo L.", strength: 1 },
-  { id: "p2", name: "Tiburones", player1: "Carlos M.", player2: "Emilio S.", strength: 2 },
-  { id: "p3", name: "Power Pádel", player1: "Ángel V.", player2: "Sergio T.", strength: 3 },
-  { id: "p4", name: "Las Panteras", player1: "Andrés G.", player2: "Luis F.", strength: 4 },
-  { id: "p5", name: "Dúo Riviera", player1: "Pablo C.", player2: "Santiago D.", strength: 5 },
-  { id: "p6", name: "Los Cracks", player1: "Rodrigo A.", player2: "Daniel P.", strength: 6 },
-  { id: "p7", name: "Net Ninjas", player1: "Tomás H.", player2: "Bruno N.", strength: 7 },
-  { id: "p8", name: "Smash Bros", player1: "Iván Q.", player2: "Hugo B.", strength: 8 },
+  { id: "p1", name: "Los Halcones", code: "LHA", color: "#EFA127", player1: "Diego R.", player2: "Mateo L.", strength: 1 },
+  { id: "p2", name: "Tiburones", code: "TIB", color: "#3B8EE0", player1: "Carlos M.", player2: "Emilio S.", strength: 2 },
+  { id: "p3", name: "Power Pádel", code: "PWR", color: "#7F77DD", player1: "Ángel V.", player2: "Sergio T.", strength: 3 },
+  { id: "p4", name: "Las Panteras", code: "PAN", color: "#D4537E", player1: "Andrés G.", player2: "Luis F.", strength: 4 },
+  { id: "p5", name: "Dúo Riviera", code: "RIV", color: "#1D9E75", player1: "Pablo C.", player2: "Santiago D.", strength: 5 },
+  { id: "p6", name: "Los Cracks", code: "CRK", color: "#97C459", player1: "Rodrigo A.", player2: "Daniel P.", strength: 6 },
+  { id: "p7", name: "Net Ninjas", code: "NIN", color: "#8FB0D6", player1: "Tomás H.", player2: "Bruno N.", strength: 7 },
+  { id: "p8", name: "Smash Bros", code: "SMB", color: "#E2574C", player1: "Iván Q.", player2: "Hugo B.", strength: 8 },
 ];
 
 export interface SetScore { home: number; away: number; }
