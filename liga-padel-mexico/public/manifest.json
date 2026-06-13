@@ -1,0 +1,13 @@
+{
+  "name": "Liga Pádel México",
+  "short_name": "Liga Pádel",
+  "description": "Liga de pádel por temporada con coordinación de horarios y ranking en vivo.",
+  "start_url": "/disponibilidad",
+  "display": "standalone",
+  "background_color": "#0B1B2E",
+  "theme_color": "#0B1B2E",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
