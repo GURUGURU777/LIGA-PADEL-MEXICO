@@ -10,6 +10,18 @@ const steps = [
 
 const partners = ["Club Pádel Tepic", "Head", "Gatorade", "Riviera Nayarit"];
 
+const torneoFormats = [
+  ["Eliminación directa", "Llaves a un partido. Clásico de fin de semana."],
+  ["Grupos + eliminatoria", "Fase de grupos y luego cuadro final."],
+  ["Round-robin corto", "Todos contra todos en un día."],
+];
+const torneoFeatures = [
+  "Cuadro y llaves automáticos",
+  "Resultados en vivo",
+  "Página pública del torneo",
+  "Videos por partido",
+];
+
 // Líneas de cancha de pádel como textura de fondo (firma de marca)
 function CourtLines() {
   return (
@@ -49,6 +61,7 @@ export default function Landing() {
           <div className="flex items-center gap-1.5">
             <Link href="/tabla" className="hidden sm:inline text-sm text-ink-muted hover:text-ink px-3 py-1.5 transition-colors">Clasificación</Link>
             <Link href="/jornadas" className="hidden sm:inline text-sm text-ink-muted hover:text-ink px-3 py-1.5 transition-colors">Jornadas</Link>
+            <Link href="/torneos" className="hidden sm:inline text-sm text-ink-muted hover:text-ink px-3 py-1.5 transition-colors">Torneos</Link>
             <Link href="/inicio" className="btn-cyan display font-bold text-sm px-4 py-2 rounded-lg">Entrar</Link>
           </div>
         </div>
@@ -165,6 +178,43 @@ export default function Landing() {
               <div className="text-sm text-ink-muted mt-1.5 leading-relaxed">{d}</div>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* Torneos */}
+      <section id="torneos" className="border-t border-line/60" style={{ background: "var(--navy)" }}>
+        <div className="container-app py-14">
+          <div className="grid md:grid-cols-2 gap-10 items-center">
+            <div>
+              <span className="inline-block text-[10px] font-bold tracking-[0.2em] text-cyan-light px-2.5 py-1 rounded" style={{ background: "rgba(59,142,224,0.1)", border: "1px solid rgba(59,142,224,0.3)" }}>
+                TAMBIÉN EN LA PLATAFORMA
+              </span>
+              <h2 className="display font-black text-3xl md:text-4xl tracking-tight mt-4">TORNEOS<br /><span className="text-cyan">EXPRESS</span></h2>
+              <p className="text-ink-muted mt-4 max-w-md leading-relaxed text-[15px]">
+                ¿Un fin de semana en vez de una temporada? Organizamos tu torneo con cuadro automático, resultados en vivo y video por partido. La misma plataforma, formato corto.
+              </p>
+              <div className="grid grid-cols-2 gap-x-5 gap-y-2.5 mt-6 max-w-sm">
+                {torneoFeatures.map((f) => (
+                  <div key={f} className="flex items-center gap-2 text-sm text-ink">
+                    <span className="text-cyan font-black">✓</span>{f}
+                  </div>
+                ))}
+              </div>
+              <Link href="/torneos" className="btn-cyan display inline-block font-extrabold text-sm px-7 py-3.5 rounded-xl mt-7">ORGANIZA TU TORNEO</Link>
+            </div>
+
+            <div className="space-y-3">
+              {torneoFormats.map(([t, d], i) => (
+                <div key={t} className="accent-top rounded-xl border border-line px-5 py-4 flex items-center gap-4" style={{ background: "var(--surface)" }}>
+                  <span className="display font-black text-2xl text-cyan-light/70 w-7">{String(i + 1).padStart(2, "0")}</span>
+                  <div>
+                    <div className="display font-bold text-[15px]">{t}</div>
+                    <div className="text-[12px] text-ink-muted mt-0.5">{d}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 
