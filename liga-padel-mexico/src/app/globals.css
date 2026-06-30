@@ -1,35 +1,119 @@
+@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --navy: #0B1B2E;
-  --navy-surface: #0E2236;
-  --navy-elevated: #13314e;
-  --cyan: #378ADD;
+  --navy: #0A1626;
+  --bg-deep: #03060C;
+  --surface: #0F2236;
+  --surface-2: #13314e;
+  --cyan: #3B8EE0;
   --cyan-light: #6FB0EE;
   --ink: #EAF2FB;
-  --ink-muted: #7CA6D6;
-  --line: #16324f;
-  --line-strong: #1f3f60;
+  --ink-muted: #8FB0D6;
+  --ink-faint: #5E7FA3;
+  --line: #1E3A5C;
+  --line-soft: #16324f;
+  --win: #34C77B;
+  --loss: #E2574C;
 }
 
-html, body { height: 100%; }
+* { box-sizing: border-box; }
+html, body { padding: 0; margin: 0; }
 
 body {
   background: var(--navy);
   color: var(--ink);
-  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
+  letter-spacing: -0.01em;
 }
 
-/* La app vive en una columna tipo móvil, centrada (PWA) */
-.app-shell {
-  max-width: 460px;
-  margin: 0 auto;
-  min-height: 100dvh;
-  display: flex;
-  flex-direction: column;
-  border-left: 0.5px solid var(--line);
-  border-right: 0.5px solid var(--line);
+a { color: inherit; text-decoration: none; }
+
+/* Tipografía display (broadcast) */
+.display { font-family: 'Archivo', 'Inter', sans-serif; }
+
+.container-app { max-width: 1080px; margin: 0 auto; padding: 0 20px; }
+
+.scroll-x { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.scroll-x::-webkit-scrollbar { height: 6px; }
+.scroll-x::-webkit-scrollbar-thumb { background: var(--line); border-radius: 3px; }
+
+/* ====== Firma broadcast ====== */
+
+/* Resplandor ambiente del hero (cancha iluminada de noche) */
+.hero-glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.hero-glow::before {
+  content: "";
+  position: absolute;
+  top: -20%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120%;
+  height: 80%;
+  background: radial-gradient(60% 70% at 50% 0%, rgba(59,142,224,0.22) 0%, rgba(59,142,224,0.06) 38%, transparent 70%);
+}
+
+/* Líneas de cancha de pádel como textura de fondo */
+.court-lines { position: absolute; inset: 0; opacity: 0.55; pointer-events: none; }
+
+/* Botón cyan con resplandor (CTA principal) */
+.btn-cyan {
+  background: var(--cyan);
+  color: #fff;
+  box-shadow: 0 0 0 0 rgba(59,142,224,0.55), 0 8px 24px -8px rgba(59,142,224,0.6);
+  transition: box-shadow 0.25s ease, transform 0.15s ease, background 0.2s ease;
+}
+.btn-cyan:hover {
+  background: #4f9ce8;
+  box-shadow: 0 0 0 4px rgba(59,142,224,0.18), 0 12px 32px -8px rgba(59,142,224,0.75);
+  transform: translateY(-1px);
+}
+.btn-ghost {
+  border: 1px solid var(--line);
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+.btn-ghost:hover { border-color: var(--cyan); background: rgba(59,142,224,0.06); }
+
+/* Tarjeta con borde superior de acento */
+.accent-top { position: relative; }
+.accent-top::before {
+  content: "";
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+}
+
+/* Punto EN VIVO pulsante */
+.live-dot { position: relative; }
+.live-dot::after {
+  content: "";
+  position: absolute; inset: -4px;
+  border-radius: 9999px;
+  border: 2px solid currentColor;
+  animation: live-pulse 1.8s ease-out infinite;
+}
+@keyframes live-pulse {
+  0%   { transform: scale(1);   opacity: 0.7; }
+  70%  { transform: scale(2.2); opacity: 0; }
+  100% { opacity: 0; }
+}
+
+/* Gradiente de marca para el wordmark */
+.brand-gradient {
+  background: linear-gradient(180deg, var(--cyan-light), var(--cyan));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .live-dot::after { animation: none; }
+  .btn-cyan, .btn-ghost { transition: none; }
 }
