@@ -1,30 +1,43 @@
 "use client";
 
 import { useState } from "react";
+import { createClient } from "@/lib/supabase/client";
 
+// Login con magic link (correo). Supabase envía un enlace de acceso.
+// Stub funcional: requiere .env.local con las claves para operar.
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [sent, setSent] = useState(false);
 
+  async function handleLogin() {
+    const supabase = createClient();
+    const { error } = await supabase.auth.signInWithOtp({ email });
+    if (!error) setSent(true);
+  }
+
   return (
-    <div className="max-w-sm mx-auto pt-10 text-center">
-      <span className="inline-flex w-14 h-14 rounded-2xl bg-cyan items-center justify-center text-lg font-bold text-navy mb-5">LP</span>
-      <h1 className="text-xl font-semibold">Liga Pádel México</h1>
-      <p className="text-sm text-ink-muted mt-1 mb-7">Entra con tu correo para ver tu liga.</p>
+    <div className="px-4 py-10 flex flex-col items-center text-center">
+      <span className="inline-block w-12 h-12 rounded-full bg-cyan mb-4" />
+      <h1 className="text-lg font-medium">Liga Pádel México</h1>
+      <p className="text-xs text-ink-muted mt-1 mb-6">Entra con tu correo para ver tu liga.</p>
 
       {sent ? (
-        <p className="text-sm" style={{ color: "var(--cyan-light)" }}>Te enviamos un enlace de acceso. Revisa tu correo.</p>
+        <p className="text-sm" style={{ color: "#6FB0EE" }}>
+          Te enviamos un enlace de acceso. Revisa tu correo.
+        </p>
       ) : (
-        <div className="space-y-3 text-left">
-          <input type="email" placeholder="tu@correo.com" value={email} onChange={(e) => setEmail(e.target.value)}
-            className="w-full rounded-lg py-3 px-4 text-sm outline-none"
-            style={{ background: "var(--surface)", color: "var(--ink)", border: "0.5px solid var(--line)" }} />
-          <button onClick={() => email && setSent(true)} className="w-full rounded-lg py-3 text-sm font-semibold" style={{ background: "var(--cyan)", color: "#fff" }}>
+        <div className="w-full max-w-xs">
+          <input
+            type="email"
+            placeholder="tu@correo.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full rounded-md py-2.5 px-3 text-sm mb-3"
+            style={{ background: "#0E2236", color: "#EAF2FB", border: "0.5px solid #1f3f60" }}
+          />
+          <button onClick={handleLogin} className="w-full rounded-md py-2.5 text-sm font-medium" style={{ background: "#378ADD", color: "#fff" }}>
             Enviar enlace de acceso
           </button>
-          <p className="text-[11px] text-ink-faint text-center pt-2">
-            Demo: el envío real de correo se activa al conectar Supabase.
-          </p>
         </div>
       )}
     </div>
